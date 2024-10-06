@@ -1,5 +1,6 @@
 package br.com.alura.ProjetoAlura.util;
 
+import br.com.alura.ProjetoAlura.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,5 +18,12 @@ public class ValidationExceptionHandler {
     public ResponseEntity<List<ErrorItemDTO>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         List<ErrorItemDTO> errors = ex.getBindingResult().getFieldErrors().stream().map(ErrorItemDTO::new).toList();
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<List<ErrorItemDTO>> handleNotFoundException(NotFoundException ex) {
+        ErrorItemDTO error = ex.getErrorItem();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of(error));
     }
 }

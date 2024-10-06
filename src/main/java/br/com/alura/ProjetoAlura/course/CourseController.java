@@ -11,10 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CourseController {
 
-    @PostMapping("/course/new")
-    public ResponseEntity createCourse(@Valid @RequestBody NewCourseDTO newCourse) {
-        // TODO: Implementar a Questão 1 - Cadastro de Cursos aqui...
+    private final CourseService courseService;
 
+    public CourseController(CourseService courseService) {
+        this.courseService = courseService;
+    }
+
+    @PostMapping("/course/new")
+    public ResponseEntity<Void> createCourse(@Valid @RequestBody NewCourseDTO newCourse) {
+
+        this.courseService.createCourse(newCourse);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
