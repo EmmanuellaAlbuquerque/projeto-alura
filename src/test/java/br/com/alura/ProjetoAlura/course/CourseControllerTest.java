@@ -177,4 +177,32 @@ public class CourseControllerTest {
                         .content(objectMapper.writeValueAsString(newCourseDTO)))
                 .andExpect(status().isCreated());
     }
+
+    @Test
+    void inactivateCourse__should_return_ok_when_user_request_is_valid() throws Exception {
+        String courseCode = "java-c";
+
+        mockMvc.perform(post("/course/" + courseCode + "/inactive")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void inactivateCourse__should_return_not_found_when_code_does_not_exists() throws Exception {
+        String courseCode = "java-c";
+
+        when(courseService.inactivateCourse(courseCode))
+                .thenThrow(new NotFoundException(
+                                new ErrorItemDTO(
+                                        "code",
+                                        "Código não encontrado no sistema")
+                        )
+                );
+
+        mockMvc.perform(post("/course/" + courseCode + "/inactive")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$[0].field").value("code"))
+                .andExpect(jsonPath(("$[0].message")).value("Código não encontrado no sistema"));
+    }
 }

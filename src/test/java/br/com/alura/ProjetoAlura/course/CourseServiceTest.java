@@ -13,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 @ExtendWith(MockitoExtension.class)
 class CourseServiceTest {
 
@@ -59,5 +61,28 @@ class CourseServiceTest {
         verify(courseRepository).save(courseCaptor.capture());
         Course savedCourse = courseCaptor.getValue();
         assertNull(savedCourse.getInactivationDate());
+    }
+
+    @Test
+    void inactivateCourse__should_set_status_to_inactive_and_fill_in_inactivation_date_when_save_with_success() {
+        String courseCode = "java-bsc";
+        NewCourseDTO newCourseDTO = new NewCourseDTO();
+        newCourseDTO.setName("Curso Java Básico");
+        newCourseDTO.setCode(courseCode);
+        newCourseDTO.setDescription("Curso introdutório de Java Básico.");
+        newCourseDTO.setInstructorEmail("paulo.s@test.com");
+        User instructor = new User("Paulo", "paulo.s@test.com", Role.INSTRUCTOR, "mudar123");
+        Course course = newCourseDTO.toModel(instructor);
+        when(courseRepository.findByCode(courseCode)).thenReturn(Optional.ofNullable(course));
+
+        courseService.inactivateCourse(courseCode);
+
+        ArgumentCaptor<Course> courseCaptor = ArgumentCaptor.forClass(Course.class);
+        verify(courseRepository).save(courseCaptor.capture());
+        Course savedCourse = courseCaptor.getValue();
+        assertAll(
+                () -> assertEquals(Status.INACTIVE, savedCourse.getStatus()),
+                () -> assertNotNull(savedCourse.getInactivationDate())
+        );
     }
 }
