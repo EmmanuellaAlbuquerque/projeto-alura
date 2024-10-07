@@ -20,4 +20,11 @@ public class UserService {
                        new ErrorItemDTO("instructorEmail", "Instrutor não encontrado no sistema")
                ));
     }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException(
+                        new ErrorItemDTO("studentEmail", "Usuário não encontrado no sistema")
+                ));
+    }
 }

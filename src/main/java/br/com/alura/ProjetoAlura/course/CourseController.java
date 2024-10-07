@@ -1,5 +1,6 @@
 package br.com.alura.ProjetoAlura.course;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ public class CourseController {
         this.courseService = courseService;
     }
 
+    @Transactional
     @PostMapping("/course/new")
     public ResponseEntity<Void> createCourse(@Valid @RequestBody NewCourseDTO newCourse) {
 
@@ -24,8 +26,9 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Transactional
     @PostMapping("/course/{code}/inactive")
-    public ResponseEntity<Void> createCourse(@PathVariable("code") String courseCode) {
+    public ResponseEntity<Void> inactivateCourse(@PathVariable("code") String courseCode) {
         this.courseService.inactivateCourse(courseCode);
         return ResponseEntity.ok().build();
     }

@@ -62,6 +62,10 @@ public class NewCourseDTO {
         this.instructorEmail = instructorEmail;
     }
 
+    public Course toModel(User instructor) {
+        return new Course(name, code, instructor, description, Status.ACTIVE);
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
@@ -72,9 +76,5 @@ public class NewCourseDTO {
     @Override
     public int hashCode() {
         return Objects.hash(getName(), getCode(), getDescription(), getInstructorEmail());
-    }
-
-    public Course toModel(User instructor) {
-        return new Course(name, code, instructor, description, Status.ACTIVE);
     }
 }

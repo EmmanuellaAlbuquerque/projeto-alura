@@ -1,5 +1,6 @@
 package br.com.alura.ProjetoAlura.registration;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,16 @@ import java.util.List;
 @RestController
 public class RegistrationController {
 
-    @PostMapping("/registration/new")
-    public ResponseEntity createCourse(@Valid @RequestBody NewRegistrationDTO newRegistration) {
-        // TODO: Implementar a Questão 3 - Criação de Matrículas aqui...
+    private final RegistrationService registrationService;
 
+    public RegistrationController(RegistrationService registrationService) {
+        this.registrationService = registrationService;
+    }
+
+    @Transactional
+    @PostMapping("/registration/new")
+    public ResponseEntity<Void> createRegistration(@Valid @RequestBody NewRegistrationDTO newRegistration) {
+        this.registrationService.createRegistration(newRegistration);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

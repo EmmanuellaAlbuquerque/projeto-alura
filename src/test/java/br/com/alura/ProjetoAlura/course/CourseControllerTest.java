@@ -10,7 +10,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -29,7 +28,7 @@ public class CourseControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void newCourse__should_return_bad_request_when_name_is_blank() throws Exception {
+    void createCourse__should_return_bad_request_when_name_is_blank() throws Exception {
         NewCourseDTO newCourseDTO = new NewCourseDTO();
         newCourseDTO.setName("");
         newCourseDTO.setCode("java-bsc");
@@ -45,7 +44,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    void newCourse__should_return_bad_request_when_code_is_blank() throws Exception {
+    void createCourse__should_return_bad_request_when_code_is_blank() throws Exception {
         NewCourseDTO newCourseDTO = new NewCourseDTO();
         newCourseDTO.setName("Curso Java Básico");
         newCourseDTO.setCode("");
@@ -61,7 +60,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    void newCourse__should_return_bad_request_when_code_have_blank_spaces() throws Exception {
+    void createCourse__should_return_bad_request_when_code_have_blank_spaces() throws Exception {
         NewCourseDTO newCourseDTO = new NewCourseDTO();
         newCourseDTO.setName("Curso Java Básico");
         newCourseDTO.setCode("java bsc");
@@ -77,7 +76,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    void newCourse__should_return_bad_request_when_code_have_special_caracteres() throws Exception {
+    void createCourse__should_return_bad_request_when_code_have_special_caracteres() throws Exception {
         NewCourseDTO newCourseDTO = new NewCourseDTO();
         newCourseDTO.setName("Curso Java Básico");
         newCourseDTO.setCode("java@bsc!");
@@ -93,7 +92,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    void newCourse__should_return_bad_request_when_code_have_numbers() throws Exception {
+    void createCourse__should_return_bad_request_when_code_have_numbers() throws Exception {
         NewCourseDTO newCourseDTO = new NewCourseDTO();
         newCourseDTO.setName("Curso Java Básico");
         newCourseDTO.setCode("javabsc2");
@@ -109,7 +108,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    void newCourse__should_return_bad_request_when_instructor_email_is_blank() throws Exception {
+    void createCourse__should_return_bad_request_when_instructor_email_is_blank() throws Exception {
         NewCourseDTO newCourseDTO = new NewCourseDTO();
         newCourseDTO.setName("Curso Java Básico");
         newCourseDTO.setCode("java-bsc");
@@ -125,7 +124,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    void newCourse__should_return_bad_request_when_instructor_email_is_invalid() throws Exception {
+    void createCourse__should_return_bad_request_when_instructor_email_is_invalid() throws Exception {
         NewCourseDTO newCourseDTO = new NewCourseDTO();
         newCourseDTO.setName("Curso Java Básico");
         newCourseDTO.setCode("java-bsc");
@@ -141,7 +140,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    void newCourse__should_return_not_found_when_instructor_does_not_exists() throws Exception {
+    void createCourse__should_return_not_found_when_instructor_does_not_exists() throws Exception {
         NewCourseDTO newCourseDTO = new NewCourseDTO();
         newCourseDTO.setName("Curso Java Básico");
         newCourseDTO.setCode("java-bsc");
@@ -165,7 +164,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    void newCourse__should_return_created_when_user_request_is_valid() throws Exception {
+    void createCourse__should_return_created_when_user_request_is_valid() throws Exception {
         NewCourseDTO newCourseDTO = new NewCourseDTO();
         newCourseDTO.setName("Curso Java Básico");
         newCourseDTO.setCode("java-bsc");

@@ -1,5 +1,6 @@
 package br.com.alura.ProjetoAlura.util;
 
+import br.com.alura.ProjetoAlura.exceptions.ErrorItemException;
 import br.com.alura.ProjetoAlura.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,5 +26,12 @@ public class ValidationExceptionHandler {
     public ResponseEntity<List<ErrorItemDTO>> handleNotFoundException(NotFoundException ex) {
         ErrorItemDTO error = ex.getErrorItem();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of(error));
+    }
+
+    @ExceptionHandler(ErrorItemException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<List<ErrorItemDTO>> handleErrorItemException(ErrorItemException ex) {
+        ErrorItemDTO error = ex.getErrorItem();
+        return ResponseEntity.badRequest().body(List.of(error));
     }
 }

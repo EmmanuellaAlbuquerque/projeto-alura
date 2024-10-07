@@ -29,16 +29,20 @@ public class CourseService {
 
     public Course inactivateCourse(String courseCode) {
 
-        Course course = courseRepository.findByCode(courseCode)
+        Course course = this.findByCode(courseCode);
+
+        course.setStatus(Status.INACTIVE);
+        course.setInactivationDate(LocalDateTime.now());
+        return courseRepository.save(course);
+    }
+
+    public Course findByCode(String courseCode) {
+        return courseRepository.findByCode(courseCode)
                 .orElseThrow(() -> new NotFoundException(
                         new ErrorItemDTO(
                                 "code",
                                 "Código não encontrado no sistema"
                         )
                 ));
-
-        course.setStatus(Status.INACTIVE);
-        course.setInactivationDate(LocalDateTime.now());
-        return courseRepository.save(course);
     }
 }
