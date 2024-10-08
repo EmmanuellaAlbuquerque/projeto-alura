@@ -28,7 +28,7 @@ public class RegistrationService {
 
     public Registration createRegistration(NewRegistrationDTO newRegistration) {
 
-        User user = this.userService.findByEmail(newRegistration.getStudentEmail());
+        User student = this.userService.findByEmail(newRegistration.getStudentEmail());
         Course course = this.courseService.findByCode(newRegistration.getCourseCode());
 
         if (course.getStatus() == Status.INACTIVE) {
@@ -40,7 +40,7 @@ public class RegistrationService {
             );
         }
 
-        if (this.registrationRepository.existsByUserAndCourse(user, course)) {
+        if (this.registrationRepository.existsByStudentAndCourse(student, course)) {
             throw new ErrorItemException(
                     new ErrorItemDTO(
                             "studentEmail",
@@ -49,7 +49,7 @@ public class RegistrationService {
             );
         }
 
-        Registration registration = newRegistration.toModel(user, course);
+        Registration registration = newRegistration.toModel(student, course);
         return registrationRepository.save(registration);
     }
 

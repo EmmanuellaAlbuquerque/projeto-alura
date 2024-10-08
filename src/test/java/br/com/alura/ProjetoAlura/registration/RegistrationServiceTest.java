@@ -85,12 +85,12 @@ public class RegistrationServiceTest {
 
         when(userService.findByEmail(newRegistrationDTO.getStudentEmail())).thenReturn(mockUser);
         when(courseService.findByCode(newRegistrationDTO.getCourseCode())).thenReturn(mockCourse);
-        when(registrationRepository.existsByUserAndCourse(mockUser, mockCourse)).thenReturn(true);
+        when(registrationRepository.existsByStudentAndCourse(mockUser, mockCourse)).thenReturn(true);
 
         assertThrows(ErrorItemException.class, () -> registrationService.createRegistration(newRegistrationDTO));
         verify(userService).findByEmail(newRegistrationDTO.getStudentEmail());
         verify(courseService).findByCode(newRegistrationDTO.getCourseCode());
-        verify(registrationRepository).existsByUserAndCourse(mockUser, mockCourse);
+        verify(registrationRepository).existsByStudentAndCourse(mockUser, mockCourse);
         verifyNoMoreInteractions(registrationRepository);
     }
 

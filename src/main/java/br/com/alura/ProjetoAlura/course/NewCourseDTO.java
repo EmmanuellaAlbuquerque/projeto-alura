@@ -21,6 +21,7 @@ public class NewCourseDTO {
     @Pattern(regexp = "^[a-z]+(-[a-z]+)*$")
     private String code;
 
+    @NotBlank
     private String description;
 
     @NotNull

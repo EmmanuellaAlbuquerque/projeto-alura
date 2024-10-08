@@ -14,8 +14,8 @@ public class Registration {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "student_id", nullable = false)
+    private User student;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
@@ -26,8 +26,8 @@ public class Registration {
 
     public Registration() {}
 
-    public Registration(User user, Course course) {
-        this.user = user;
+    public Registration(User student, Course course) {
+        this.student = student;
         this.course = course;
     }
 
@@ -40,11 +40,11 @@ public class Registration {
     }
 
     public User getUser() {
-        return user;
+        return student;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(User student) {
+        this.student = student;
     }
 
     public Course getCourse() {

@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface RegistrationRepository extends JpaRepository<Registration, Long> {
 
-    boolean existsByUserAndCourse(User user, Course course);
+    boolean existsByStudentAndCourse(User student, Course course);
 
     @Query(value =
             """
-                SELECT COUNT(user_id) as totalRegistrations, course.name as courseName, course.code as courseCode, user.name as instructorName, user.email as instructorEmail FROM registration
+                SELECT COUNT(student_id) AS totalRegistrations, course.name AS courseName, course.code AS courseCode, user.name AS instructorName, user.email AS instructorEmail FROM registration
                 INNER JOIN course ON registration.course_id=course.id
                 INNER JOIN user ON course.instructor_id=user.id
                 GROUP BY course_id ORDER BY totalRegistrations DESC;

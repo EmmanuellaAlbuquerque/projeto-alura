@@ -39,6 +39,15 @@ public class CourseService {
 
         Course course = this.findByCode(courseCode);
 
+        if (course.getStatus() == Status.INACTIVE) {
+            throw new ErrorItemException(
+                    new ErrorItemDTO(
+                            "course",
+                            "O Curso já está inativo"
+                    )
+            );
+        }
+
         course.setStatus(Status.INACTIVE);
         course.setInactivationDate(LocalDateTime.now());
         return courseRepository.save(course);
