@@ -2,7 +2,9 @@ package br.com.alura.ProjetoAlura.course;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verifyNoInteractions;
 
+import br.com.alura.ProjetoAlura.exceptions.ErrorItemException;
 import br.com.alura.ProjetoAlura.user.Role;
 import br.com.alura.ProjetoAlura.user.User;
 import br.com.alura.ProjetoAlura.user.UserService;
@@ -84,5 +86,21 @@ class CourseServiceTest {
                 () -> assertEquals(Status.INACTIVE, savedCourse.getStatus()),
                 () -> assertNotNull(savedCourse.getInactivationDate())
         );
+    }
+
+    @Test
+    void createCourse__should_return_exception_when_code_already_exists() {
+        NewCourseDTO newCourseDTO = new NewCourseDTO();
+        newCourseDTO.setName("Curso Java Básico");
+        newCourseDTO.setCode("java-bsc");
+        newCourseDTO.setDescription("Curso introdutório de Java Básico.");
+        newCourseDTO.setInstructorEmail("paulo.s@test.com");
+
+        when(courseRepository.existsByCode(newCourseDTO.getCode())).thenReturn(true);
+
+        assertThrows(ErrorItemException.class, () -> courseService.createCourse(newCourseDTO));
+        verify(courseRepository).existsByCode(newCourseDTO.getCode());
+        verifyNoMoreInteractions(userService);
+        verifyNoMoreInteractions(courseRepository);
     }
 }

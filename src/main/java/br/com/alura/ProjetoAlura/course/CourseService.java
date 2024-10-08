@@ -1,5 +1,6 @@
 package br.com.alura.ProjetoAlura.course;
 
+import br.com.alura.ProjetoAlura.exceptions.ErrorItemException;
 import br.com.alura.ProjetoAlura.exceptions.NotFoundException;
 import br.com.alura.ProjetoAlura.user.UserService;
 import br.com.alura.ProjetoAlura.user.User;
@@ -20,6 +21,13 @@ public class CourseService {
     }
 
     public Course createCourse(NewCourseDTO newCourse) {
+
+        if (courseRepository.existsByCode(newCourse.getCode())) {
+            throw new ErrorItemException(new ErrorItemDTO(
+                    "code",
+                    "Código já cadastrado no sistema"
+            ));
+        }
 
         User instructor = userService.findInstructorByEmail(newCourse.getInstructorEmail());
         Course course = newCourse.toModel(instructor);
