@@ -28,6 +28,7 @@ public class Course {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(name = "inactivation_date")
     private LocalDateTime inactivationDate;
 
     public Course() {}
