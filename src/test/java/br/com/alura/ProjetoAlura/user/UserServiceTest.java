@@ -44,8 +44,8 @@ public class UserServiceTest {
     @Test
     void createStudent__should_create_student_with_success() throws Exception {
         NewStudentUserDTO newStudentUserDTO = new NewStudentUserDTO();
-        newStudentUserDTO.setEmail("charles@alura.com.br");
-        newStudentUserDTO.setName("Charles");
+        newStudentUserDTO.setEmail("manu@example.com.br");
+        newStudentUserDTO.setName("Manu");
         newStudentUserDTO.setPassword("mudar123");
         ArgumentCaptor<User> studentCaptor = ArgumentCaptor.forClass(User.class);
 
@@ -54,11 +54,31 @@ public class UserServiceTest {
 
         verify(userRepository).save(studentCaptor.capture());
         User capturedStudent = studentCaptor.getValue();
-        assertEquals("Charles", capturedStudent.getName());
-        assertEquals("charles@alura.com.br", capturedStudent.getEmail());
+        assertEquals("Manu", capturedStudent.getName());
+        assertEquals("manu@example.com.br", capturedStudent.getEmail());
         assertEquals(Role.STUDENT, capturedStudent.getRole());
         assertNotNull(capturedStudent.getPassword());
         assertNotNull(capturedStudent.getCreatedAt());
+    }
+
+    @Test
+    void createInstructor__should_create_instructor_with_success() throws Exception {
+        NewInstructorUserDTO newInstructorUserDTO = new NewInstructorUserDTO();
+        newInstructorUserDTO.setEmail("charles@alura.com.br");
+        newInstructorUserDTO.setName("Charles");
+        newInstructorUserDTO.setPassword("mudar123");
+        ArgumentCaptor<User> instructorCaptor = ArgumentCaptor.forClass(User.class);
+
+        when(userRepository.existsByEmail(newInstructorUserDTO.getEmail())).thenReturn(false);
+        userService.createInstructor(newInstructorUserDTO);
+
+        verify(userRepository).save(instructorCaptor.capture());
+        User capturedInstructor = instructorCaptor.getValue();
+        assertEquals("Charles", capturedInstructor.getName());
+        assertEquals("charles@alura.com.br", capturedInstructor.getEmail());
+        assertEquals(Role.INSTRUCTOR, capturedInstructor.getRole());
+        assertNotNull(capturedInstructor.getPassword());
+        assertNotNull(capturedInstructor.getCreatedAt());
     }
 
     @Test

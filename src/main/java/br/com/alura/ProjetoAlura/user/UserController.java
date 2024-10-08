@@ -1,6 +1,5 @@
 package br.com.alura.ProjetoAlura.user;
 
-import br.com.alura.ProjetoAlura.util.ErrorItemDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +25,13 @@ public class UserController {
     public ResponseEntity<Void> newStudent(@RequestBody @Valid NewStudentUserDTO newStudent) {
 
         this.userService.createStudent(newStudent);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @Transactional
+    @PostMapping("/user/newInstructor")
+    public ResponseEntity<Void> newInstructor(@RequestBody @Valid NewInstructorUserDTO newInstructor) {
+        this.userService.createInstructor(newInstructor);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

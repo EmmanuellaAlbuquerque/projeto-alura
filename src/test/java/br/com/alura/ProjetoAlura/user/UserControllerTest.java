@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -102,15 +101,52 @@ class UserControllerTest {
     }
 
     @Test
+    void newInstructor__should_return_bad_request_when_email_already_exists() throws Exception {
+        NewInstructorUserDTO newInstructorUserDTO = new NewInstructorUserDTO();
+        newInstructorUserDTO.setEmail("charles@alura.com.br");
+        newInstructorUserDTO.setName("Charles");
+        newInstructorUserDTO.setPassword("mudar123");
+
+        when(userService.createInstructor(newInstructorUserDTO)).thenThrow(
+                new ErrorItemException(
+                        new ErrorItemDTO(
+                                "email",
+                                "Email já cadastrado no sistema"
+                        )
+                )
+        );
+
+        mockMvc.perform(post("/user/newInstructor")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newInstructorUserDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$[0].field").value("email"))
+                .andExpect(jsonPath("$[0].message").value("Email já cadastrado no sistema"));
+    }
+
+    @Test
     void newStudent__should_return_created_when_user_request_is_valid() throws Exception {
         NewStudentUserDTO newStudentUserDTO = new NewStudentUserDTO();
-        newStudentUserDTO.setEmail("charles@alura.com.br");
-        newStudentUserDTO.setName("Charles");
+        newStudentUserDTO.setEmail("manu@example.com.br");
+        newStudentUserDTO.setName("Manu");
         newStudentUserDTO.setPassword("mudar123");
 
         mockMvc.perform(post("/user/newStudent")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newStudentUserDTO)))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void newInstructor__should_return_created_when_user_request_is_valid() throws Exception {
+        NewInstructorUserDTO newInstructorUserDTO = new NewInstructorUserDTO();
+        newInstructorUserDTO.setEmail("charles@alura.com.br");
+        newInstructorUserDTO.setName("Charles");
+        newInstructorUserDTO.setPassword("mudar123");
+
+        mockMvc.perform(post("/user/newInstructor")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newInstructorUserDTO)))
                 .andExpect(status().isCreated());
     }
 
