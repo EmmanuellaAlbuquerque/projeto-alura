@@ -2,9 +2,8 @@ package br.com.alura.ProjetoAlura.course;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verifyNoInteractions;
 
-import br.com.alura.ProjetoAlura.exceptions.ErrorItemException;
+import br.com.alura.ProjetoAlura.util.exceptions.ErrorItemException;
 import br.com.alura.ProjetoAlura.user.Role;
 import br.com.alura.ProjetoAlura.user.User;
 import br.com.alura.ProjetoAlura.user.UserService;

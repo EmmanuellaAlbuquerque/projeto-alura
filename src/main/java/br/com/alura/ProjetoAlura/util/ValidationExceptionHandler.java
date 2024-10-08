@@ -1,7 +1,7 @@
 package br.com.alura.ProjetoAlura.util;
 
-import br.com.alura.ProjetoAlura.exceptions.ErrorItemException;
-import br.com.alura.ProjetoAlura.exceptions.NotFoundException;
+import br.com.alura.ProjetoAlura.util.exceptions.ErrorItemException;
+import br.com.alura.ProjetoAlura.util.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

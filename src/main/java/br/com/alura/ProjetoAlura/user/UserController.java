@@ -15,29 +15,22 @@ import java.util.List;
 @RestController
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @Transactional
     @PostMapping("/user/newStudent")
-    public ResponseEntity newStudent(@RequestBody @Valid NewStudentUserDTO newStudent) {
-        if(userRepository.existsByEmail(newStudent.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ErrorItemDTO("email", "Email já cadastrado no sistema"));
-        }
+    public ResponseEntity<Void> newStudent(@RequestBody @Valid NewStudentUserDTO newStudent) {
 
-        User user = newStudent.toModel();
-        userRepository.save(user);
-
+        this.userService.createStudent(newStudent);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/user/all")
     public List<UserListItemDTO> listAllUsers() {
-        return userRepository.findAll().stream().map(UserListItemDTO::new).toList();
+        return this.userService.obtainAllUsers();
     }
-
 }

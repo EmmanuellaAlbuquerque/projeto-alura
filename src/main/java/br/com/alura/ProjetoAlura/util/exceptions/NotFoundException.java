@@ -1,4 +1,4 @@
-package br.com.alura.ProjetoAlura.exceptions;
+package br.com.alura.ProjetoAlura.util.exceptions;
 
 import br.com.alura.ProjetoAlura.util.ErrorItemDTO;
 

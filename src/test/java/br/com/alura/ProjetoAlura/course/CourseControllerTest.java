@@ -1,6 +1,6 @@
 package br.com.alura.ProjetoAlura.course;
 
-import br.com.alura.ProjetoAlura.exceptions.NotFoundException;
+import br.com.alura.ProjetoAlura.util.exceptions.NotFoundException;
 import br.com.alura.ProjetoAlura.util.ErrorItemDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

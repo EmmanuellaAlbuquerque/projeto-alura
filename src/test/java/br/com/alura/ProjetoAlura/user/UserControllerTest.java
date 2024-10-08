@@ -1,5 +1,7 @@
 package br.com.alura.ProjetoAlura.user;
 
+import br.com.alura.ProjetoAlura.util.ErrorItemDTO;
+import br.com.alura.ProjetoAlura.util.exceptions.ErrorItemException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +10,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -23,7 +27,7 @@ class UserControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -80,14 +84,21 @@ class UserControllerTest {
         newStudentUserDTO.setName("Charles");
         newStudentUserDTO.setPassword("mudar123");
 
-        when(userRepository.existsByEmail(newStudentUserDTO.getEmail())).thenReturn(true);
+        when(userService.createStudent(newStudentUserDTO)).thenThrow(
+                new ErrorItemException(
+                        new ErrorItemDTO(
+                                "email",
+                                "Email já cadastrado no sistema"
+                        )
+                )
+        );
 
         mockMvc.perform(post("/user/newStudent")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newStudentUserDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.field").value("email"))
-                .andExpect(jsonPath("$.message").value("Email já cadastrado no sistema"));
+                .andExpect(jsonPath("$[0].field").value("email"))
+                .andExpect(jsonPath("$[0].message").value("Email já cadastrado no sistema"));
     }
 
     @Test
@@ -97,8 +108,6 @@ class UserControllerTest {
         newStudentUserDTO.setName("Charles");
         newStudentUserDTO.setPassword("mudar123");
 
-        when(userRepository.existsByEmail(newStudentUserDTO.getEmail())).thenReturn(false);
-
         mockMvc.perform(post("/user/newStudent")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newStudentUserDTO)))
@@ -107,16 +116,25 @@ class UserControllerTest {
 
     @Test
     void listAllUsers__should_list_all_users() throws Exception {
+        List<UserListItemDTO> usersDTO = new ArrayList<>();
         User user1 = new User("User 1", "user1@test.com", Role.STUDENT,"mudar123");
         User user2 = new User("User 2", "user2@test.com",Role.STUDENT,"mudar123");
+        usersDTO.add(new UserListItemDTO(user1));
+        usersDTO.add(new UserListItemDTO(user2));
 
-        when(userRepository.findAll()).thenReturn(Arrays.asList(user1, user2));
+        when(userService.obtainAllUsers()).thenReturn(usersDTO);
 
         mockMvc.perform(get("/user/all")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+
                 .andExpect(jsonPath("$[0].name").value("User 1"))
-                .andExpect(jsonPath("$[1].name").value("User 2"));
+                .andExpect(jsonPath("$[0].email").value("user1@test.com"))
+                .andExpect(jsonPath("$[0].role").value("STUDENT"))
+
+                .andExpect(jsonPath("$[1].name").value("User 2"))
+                .andExpect(jsonPath("$[1].email").value("user2@test.com"))
+                .andExpect(jsonPath("$[1].role").value("STUDENT"));
     }
 
 }

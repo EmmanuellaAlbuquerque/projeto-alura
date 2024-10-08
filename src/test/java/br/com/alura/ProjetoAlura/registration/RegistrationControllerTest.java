@@ -1,6 +1,6 @@
 package br.com.alura.ProjetoAlura.registration;
 
-import br.com.alura.ProjetoAlura.exceptions.ErrorItemException;
+import br.com.alura.ProjetoAlura.util.exceptions.ErrorItemException;
 import br.com.alura.ProjetoAlura.util.ErrorItemDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

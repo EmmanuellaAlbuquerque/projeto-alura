@@ -1,7 +1,7 @@
 package br.com.alura.ProjetoAlura.course;
 
-import br.com.alura.ProjetoAlura.exceptions.ErrorItemException;
-import br.com.alura.ProjetoAlura.exceptions.NotFoundException;
+import br.com.alura.ProjetoAlura.util.exceptions.ErrorItemException;
+import br.com.alura.ProjetoAlura.util.exceptions.NotFoundException;
 import br.com.alura.ProjetoAlura.user.UserService;
 import br.com.alura.ProjetoAlura.user.User;
 import br.com.alura.ProjetoAlura.util.ErrorItemDTO;

@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.Objects;
+
 import static br.com.alura.ProjetoAlura.user.Role.STUDENT;
 
 public class NewStudentUserDTO {
@@ -51,4 +53,15 @@ public class NewStudentUserDTO {
         return new User(name, email, STUDENT, password);
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof NewStudentUserDTO that)) return false;
+        return Objects.equals(getName(), that.getName()) && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getPassword(), that.getPassword());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getEmail(), getPassword());
+    }
 }
