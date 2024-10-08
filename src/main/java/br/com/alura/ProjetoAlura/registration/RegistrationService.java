@@ -9,6 +9,8 @@ import br.com.alura.ProjetoAlura.user.UserService;
 import br.com.alura.ProjetoAlura.util.ErrorItemDTO;
 import org.springframework.stereotype.Service;
 
+import java.util.*;
+
 @Service
 public class RegistrationService {
 
@@ -49,5 +51,20 @@ public class RegistrationService {
 
         Registration registration = newRegistration.toModel(user, course);
         return registrationRepository.save(registration);
+    }
+
+    public List<RegistrationReportItem> report() {
+
+        List<RegistrationReportProjection> reportProjections = this.registrationRepository.findAllGroupByCourseAndOrderByStudentsCount();
+
+        return reportProjections.stream()
+                .map(reportProjection -> new RegistrationReportItem(
+                        reportProjection.getCourseName(),
+                        reportProjection.getCourseCode(),
+                        reportProjection.getInstructorName(),
+                        reportProjection.getInstructorEmail(),
+                        reportProjection.getTotalRegistrations()
+                )).toList();
+
     }
 }

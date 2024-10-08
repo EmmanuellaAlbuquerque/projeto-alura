@@ -14,6 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -106,5 +110,29 @@ public class RegistrationServiceTest {
         verify(userService).findByEmail(newRegistrationDTO.getStudentEmail());
         verify(courseService).findByCode(newRegistrationDTO.getCourseCode());
         verifyNoInteractions(registrationRepository);
+    }
+
+    @Test
+    void report__should_return_registration_report_item_list() throws Exception {
+        List<RegistrationReportProjection> reportProjections = new ArrayList<>();
+
+        reportProjections.add(new RegistrationReportItem(
+                        "Java para Iniciantes",
+                        "java",
+                        "Charles",
+                        "charles@alura.com.br",
+                        10L
+                ));
+
+        when(registrationRepository.findAllGroupByCourseAndOrderByStudentsCount()).thenReturn(reportProjections);
+        List<RegistrationReportItem> registrationReportItems = registrationService.report();
+
+        RegistrationReportItem reportOne = registrationReportItems.getFirst();
+        verify(registrationRepository).findAllGroupByCourseAndOrderByStudentsCount();
+        assertEquals("Java para Iniciantes", reportOne.getCourseName());
+        assertEquals("java", reportOne.getCourseCode());
+        assertEquals("Charles", reportOne.getInstructorName());
+        assertEquals("charles@alura.com.br", reportOne.getInstructorEmail());
+        assertEquals(10L, reportOne.getTotalRegistrations());
     }
 }

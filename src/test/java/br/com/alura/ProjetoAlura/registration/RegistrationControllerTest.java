@@ -2,7 +2,6 @@ package br.com.alura.ProjetoAlura.registration;
 
 import br.com.alura.ProjetoAlura.exceptions.ErrorItemException;
 import br.com.alura.ProjetoAlura.util.ErrorItemDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -122,5 +125,58 @@ public class RegistrationControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newRegistrationDTO)))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    void obtainReport__should_return_all_registrations_as_report() throws Exception {
+        List<RegistrationReportItem> reportItemList = new ArrayList<>();
+
+        reportItemList.add(new RegistrationReportItem(
+                "Java para Iniciantes",
+                "java",
+                "Charles",
+                "charles@alura.com.br",
+                10L
+        ));
+
+        reportItemList.add(new RegistrationReportItem(
+                "Spring para Iniciantes",
+                "spring",
+                "Charles",
+                "charles@alura.com.br",
+                9L
+        ));
+
+        reportItemList.add(new RegistrationReportItem(
+                "Maven para Avançados",
+                "maven",
+                "Charles",
+                "charles@alura.com.br",
+                9L
+        ));
+
+        when(registrationService.report()).thenReturn(reportItemList);
+
+        mockMvc.perform(get("/registration/report")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+
+                .andExpect(jsonPath("$[0].courseName").value("Java para Iniciantes"))
+                .andExpect(jsonPath("$[0].courseCode").value("java"))
+                .andExpect(jsonPath("$[0].instructorName").value("Charles"))
+                .andExpect(jsonPath("$[0].instructorEmail").value("charles@alura.com.br"))
+                .andExpect(jsonPath("$[0].totalRegistrations").value(10L))
+
+                .andExpect(jsonPath("$[1].courseName").value("Spring para Iniciantes"))
+                .andExpect(jsonPath("$[1].courseCode").value("spring"))
+                .andExpect(jsonPath("$[1].instructorName").value("Charles"))
+                .andExpect(jsonPath("$[1].instructorEmail").value("charles@alura.com.br"))
+                .andExpect(jsonPath("$[1].totalRegistrations").value(9L))
+
+                .andExpect(jsonPath("$[2].courseName").value("Maven para Avançados"))
+                .andExpect(jsonPath("$[2].courseCode").value("maven"))
+                .andExpect(jsonPath("$[2].instructorName").value("Charles"))
+                .andExpect(jsonPath("$[2].instructorEmail").value("charles@alura.com.br"))
+                .andExpect(jsonPath("$[2].totalRegistrations").value(9L));
     }
 }

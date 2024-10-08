@@ -1,6 +1,6 @@
 package br.com.alura.ProjetoAlura.registration;
 
-public class RegistrationReportItem {
+public class RegistrationReportItem implements RegistrationReportProjection {
 
     private final String courseName;
     private final String courseCode;
