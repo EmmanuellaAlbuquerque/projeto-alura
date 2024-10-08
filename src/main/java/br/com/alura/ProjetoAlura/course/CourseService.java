@@ -53,4 +53,10 @@ public class CourseService {
                         )
                 ));
     }
+
+    public CourseResponseDTO findOneCourseByCode(String code) {
+         Course course = this.findByCode(code);
+
+         return course.toDTO();
+    }
 }

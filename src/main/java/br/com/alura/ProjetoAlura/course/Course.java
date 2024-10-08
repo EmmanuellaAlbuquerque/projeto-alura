@@ -1,9 +1,11 @@
 package br.com.alura.ProjetoAlura.course;
 
+import br.com.alura.ProjetoAlura.user.InstructorResponseDTO;
 import br.com.alura.ProjetoAlura.user.User;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 @Entity
 public class Course {
@@ -95,5 +97,19 @@ public class Course {
 
     public void setInactivationDate(LocalDateTime inactivationDate) {
         this.inactivationDate = inactivationDate;
+    }
+
+    public CourseResponseDTO toDTO() {
+        return new CourseResponseDTO(
+                this.name,
+                this.code,
+                this.description,
+                new InstructorResponseDTO(
+                        this.instructor.getName(),
+                        this.instructor.getEmail()
+                ),
+                this.getStatus(),
+                this.inactivationDate
+        );
     }
 }

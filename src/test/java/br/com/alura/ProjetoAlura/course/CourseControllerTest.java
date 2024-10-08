@@ -1,5 +1,6 @@
 package br.com.alura.ProjetoAlura.course;
 
+import br.com.alura.ProjetoAlura.user.InstructorResponseDTO;
 import br.com.alura.ProjetoAlura.util.exceptions.NotFoundException;
 import br.com.alura.ProjetoAlura.util.ErrorItemDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,8 +11,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -178,11 +183,37 @@ public class CourseControllerTest {
     }
 
     @Test
+    void findOneCourse__should_return_a_curse_details() throws Exception {
+        CourseResponseDTO courseResponseDTO = new CourseResponseDTO(
+                "Curso Java Básico",
+                "java-bsc",
+                "Curso introdutório de Java Básico.",
+                new InstructorResponseDTO(
+                        "Paulo",
+                        "paulo.s@test.com"
+                ),
+                Status.INACTIVE,
+                LocalDateTime.now().minusYears(2)
+        );
+
+        when(courseService.findOneCourseByCode(courseResponseDTO.code())).thenReturn(courseResponseDTO);
+
+        mockMvc.perform(get("/course?code=" + courseResponseDTO.code()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(courseResponseDTO.name()))
+                .andExpect(jsonPath("$.code").value(courseResponseDTO.code()))
+                .andExpect(jsonPath("$.description").value(courseResponseDTO.description()))
+                .andExpect(jsonPath("$.instructor.name").value(courseResponseDTO.instructor().name()))
+                .andExpect(jsonPath("$.instructor.email").value(courseResponseDTO.instructor().email()))
+                .andExpect(jsonPath("$.status").value(courseResponseDTO.status().toString()))
+                .andExpect(jsonPath("$.inactivationDate").isNotEmpty());
+    }
+
+    @Test
     void inactivateCourse__should_return_ok_when_user_request_is_valid() throws Exception {
         String courseCode = "java-c";
 
-        mockMvc.perform(post("/course/" + courseCode + "/inactive")
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/course/" + courseCode + "/inactive"))
                 .andExpect(status().isOk());
     }
 
