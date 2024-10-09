@@ -69,7 +69,7 @@ public class CourseControllerTest {
         NewCourseDTO newCourseDTO = new NewCourseDTO();
         newCourseDTO.setName("Curso Java Básico");
         newCourseDTO.setCode("java bsc");
-        newCourseDTO.setDescription("");
+        newCourseDTO.setDescription("Descrição Curso Básico de Java");
         newCourseDTO.setInstructorEmail("paulo.s@test.com");
 
         mockMvc.perform(post("/course/new")
@@ -85,7 +85,7 @@ public class CourseControllerTest {
         NewCourseDTO newCourseDTO = new NewCourseDTO();
         newCourseDTO.setName("Curso Java Básico");
         newCourseDTO.setCode("java@bsc!");
-        newCourseDTO.setDescription("");
+        newCourseDTO.setDescription("Descrição Java Básico");
         newCourseDTO.setInstructorEmail("paulo.s@test.com");
 
         mockMvc.perform(post("/course/new")
@@ -101,7 +101,7 @@ public class CourseControllerTest {
         NewCourseDTO newCourseDTO = new NewCourseDTO();
         newCourseDTO.setName("Curso Java Básico");
         newCourseDTO.setCode("javabsc2");
-        newCourseDTO.setDescription("");
+        newCourseDTO.setDescription("Descrição Curso Básico de Java");
         newCourseDTO.setInstructorEmail("paulo.s@test.com");
 
         mockMvc.perform(post("/course/new")
